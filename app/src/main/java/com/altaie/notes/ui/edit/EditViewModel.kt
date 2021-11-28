@@ -6,6 +6,7 @@ import com.altaie.notes.model.data.doamin.Note
 import com.altaie.notes.ui.base.BaseViewModel
 import com.altaie.notes.utils.Event
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onCompletion
 import java.util.*
 
@@ -19,8 +20,8 @@ class EditViewModel : BaseViewModel(), EditInteractionListener {
     val deleteStatus = MutableStateFlow(Event(false))
 
     init {
-        launcher { titleFlow.onCompletion { emitNote() } }
-        launcher { contentFlow.onCompletion { emitNote() } }
+        launcher { titleFlow.collect { emitNote() } }
+        launcher { contentFlow.collect { emitNote() } }
     }
 
     private suspend fun emitNote() {
