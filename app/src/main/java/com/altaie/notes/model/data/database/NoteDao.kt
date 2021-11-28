@@ -13,7 +13,7 @@ interface NoteDao {
     @Delete
     suspend fun delete(note: Note)
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun update(note: Note)
 
     @Query("SELECT * FROM TB_NOTES ORDER BY date DESC")
@@ -22,6 +22,6 @@ interface NoteDao {
     @Query("SELECT * FROM TB_NOTES WHERE id = :noteID")
     fun getNotes(noteID: Long): Flow<Note?>
 
-    @Query("SELECT * FROM TB_NOTES WHERE (title LIKE :query || '%' OR content LIKE :query || '%')")
+    @Query("SELECT * FROM TB_NOTES WHERE (title LIKE '%' || :query || '%' OR content LIKE '%' || :query || '%')")
     fun searchByTitleOrContent(query: String) : Flow<List<Note>>
 }
